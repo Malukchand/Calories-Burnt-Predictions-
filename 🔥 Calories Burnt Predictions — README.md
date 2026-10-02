@@ -418,23 +418,6 @@ Roughly equivalent to:
 
 Estimated via linear weights: Duration (coeff \~7.2) + Heart Rate + Body Temp
 
----
-
-Resume Format
-
-## Ready to paste into your CV
-
-Exactly how this project appears in your resume — just click copy.
-
-📄 Calories Burnt Predictions | Self Project | ⭐ (May'25 – Jun'25)
-
-- Built a calorie expenditure prediction model using user activity, health, and demographic features from a Kaggle dataset
-- Cleaned and analyzed the dataset using Pandas, visualizing trend patterns with histograms, boxplots and correlation heatmaps
-- Trained and evaluated a Linear Regression model using scikit-learn with R-squared, MAE and MSE metrics
-- Identified activity duration (0.96), heart rate (0.90), body temperature (0.82) as the strongest major factors influencing calorie burn
-
----
-
 Setup
 
 ## Run it in 3 commands
@@ -461,11 +444,6 @@ bash
 
 \# 1. Clone git clone https://github.com/Malukchand/Calories-Burnt-Predictions-.git cd Calories-Burnt-Predictions- # 2. Install dependencies pip install numpy pandas matplotlib seaborn scikit-learn statsmodels scipy jupyter # 3. Run jupyter notebook Calories_Burnt_Predictions.ipynb
 
----
-
-Maluk — BSBE, IIT Kanpur
-
-3rd Year · Biological Sciences & Bioengineering · Batch 2023 · May–Jun 2025
 
 [🐙 GitHub](https://github.com/Malukchand) [📁 Repo](https://github.com/Malukchand/Calories-Burnt-Predictions-) [📓 Notebook](https://github.com/Malukchand/Calories-Burnt-Predictions-/blob/main/Calories_Burnt_Predictions.ipynb)
 
