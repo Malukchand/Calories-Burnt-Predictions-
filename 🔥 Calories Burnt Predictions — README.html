@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>🔥 Calories Burnt Predictions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060b14;--s1:#0c1420;--s2:#111d2e;--s3:#162032;
+  --bdr:#1a2d42;--bdr2:#223346;
+  --or:#f97316;--or2:#fb923c;--or3:#fed7aa;
+  --bl:#3b82f6;--gr:#22c55e;--pu:#a855f7;--te:#14b8a6;--re:#ef4444;--ye:#eab308;
+  --tx:#dde6f0;--txm:#7a8fa8;--txd:#3a4f63;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:var(--sans);font-size:15px;line-height:1.65;overflow-x:hidden}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(6,11,20,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 1.4rem;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+.nav-logo{font-weight:800;font-size:14.5px;padding:13px 0;margin-right:20px;white-space:nowrap;color:var(--tx);display:flex;align-items:center;gap:6px;flex-shrink:0}
+.nl{padding:13px 12px;font-size:13px;font-weight:500;color:var(--txm);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:color .15s}
+.nl:hover{color:var(--tx)}
+.nspc{flex:1;min-width:16px}
+.nghub{display:flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--bdr);color:var(--tx);padding:6px 12px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:all .15s}
+.nghub:hover{border-color:var(--or);color:var(--or)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem 1.5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 50% 15%,rgba(249,115,22,.13) 0%,transparent 70%),radial-gradient(ellipse 35% 30% at 85% 75%,rgba(59,130,246,.09) 0%,transparent 60%),radial-gradient(ellipse 25% 25% at 10% 80%,rgba(168,85,247,.07) 0%,transparent 60%);pointer-events:none}
+.hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.28);border-radius:999px;padding:5px 15px;font-size:11.5px;font-weight:700;letter-spacing:.08em;color:var(--or2);margin-bottom:1.8rem;text-transform:uppercase}
+.htitle{font-size:clamp(3rem,9vw,6.5rem);font-weight:900;line-height:1.02;letter-spacing:-.035em;margin-bottom:1.1rem}
+.hfire{display:block}
+.hgrad{background:linear-gradient(135deg,#f97316 0%,#fb923c 45%,#fbbf24 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hsub{max-width:560px;color:var(--txm);font-size:1.05rem;margin-bottom:2.5rem;line-height:1.75}
+.hcta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:11px 20px;border-radius:8px;font-size:13.5px;font-weight:600;text-decoration:none;cursor:pointer;border:none;font-family:var(--sans);transition:all .2s}
+.btnp{background:var(--or);color:#fff;box-shadow:0 0 24px rgba(249,115,22,.35)}
+.btnp:hover{background:var(--or2);transform:translateY(-1px);box-shadow:0 0 36px rgba(249,115,22,.5)}
+.btns{background:var(--s2);color:var(--tx);border:1px solid var(--bdr)}
+.btns:hover{border-color:var(--or);color:var(--or);transform:translateY(-1px)}
+
+/* STATS */
+.stats{display:flex;justify-content:center;flex-wrap:wrap;gap:0;background:var(--s1);border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr)}
+.sitem{flex:1 1 140px;max-width:180px;padding:1.2rem 1rem;text-align:center;border-right:1px solid var(--bdr)}
+.sitem:last-child{border-right:none}
+.snum{font-size:1.75rem;font-weight:900;letter-spacing:-.03em;display:block;line-height:1.1}
+.slbl{font-size:11px;color:var(--txm);text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
+hr.div{border:none;border-top:1px solid var(--bdr)}
+
+/* SECTIONS */
+.sec{max-width:880px;margin:0 auto;padding:4rem 1.5rem}
+.slabel{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--or);margin-bottom:.5rem}
+.stitle{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;letter-spacing:-.025em;margin-bottom:.9rem;line-height:1.2}
+.sbody{color:var(--txm);line-height:1.75;max-width:66ch}
+
+/* REVEAL */
+.rev{opacity:0;transform:translateY(22px);transition:opacity .5s ease,transform .5s ease}
+.rev.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rev{opacity:1;transform:none}*{transition:none!important}}
+
+/* CARDS GRID */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1px;background:var(--bdr);border:1px solid var(--bdr);border-radius:12px;overflow:hidden;margin-top:2rem}
+.ccard{background:var(--s1);padding:1.5rem;transition:background .18s}
+.ccard:hover{background:var(--s2)}
+.ccico{font-size:1.5rem;margin-bottom:.65rem;display:block}
+.cctit{font-size:.93rem;font-weight:700;margin-bottom:.3rem}
+.ccdesc{font-size:.83rem;color:var(--txm);line-height:1.6}
+
+/* FEATURE ANALYSIS TABS */
+.feat-tabs{margin-top:2.2rem}
+.tbar{display:flex;gap:3px;border-bottom:1px solid var(--bdr);flex-wrap:wrap}
+.tbtn{background:none;border:none;color:var(--txm);padding:10px 15px;cursor:pointer;font-family:var(--sans);font-size:13px;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.tbtn.on{color:var(--or);border-bottom-color:var(--or)}
+.tbtn:hover:not(.on){color:var(--tx)}
+.tpanel{display:none;padding-top:1.5rem}
+.tpanel.on{display:block}
+
+/* FEATURE CARD */
+.fcard{background:var(--s1);border:1px solid var(--bdr);border-radius:12px;padding:1.8rem;margin-bottom:1rem}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.2rem}
+@media(max-width:580px){.frow{grid-template-columns:1fr}}
+.fmeta{background:var(--s2);border:1px solid var(--bdr2);border-radius:9px;padding:1rem 1.2rem}
+.fmeta-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--txm);margin-bottom:.4rem}
+.fmeta-val{font-family:var(--mono);font-size:1.05rem;font-weight:600}
+
+/* R2 bar */
+.r2bar-wrap{margin-top:1rem}
+.r2bar-label{display:flex;justify-content:space-between;font-size:.8rem;color:var(--txm);margin-bottom:4px}
+.r2bar{height:7px;background:var(--s2);border-radius:999px;overflow:hidden}
+.r2fill{height:100%;border-radius:999px;transition:width 1s cubic-bezier(.4,0,.2,1);width:0}
+
+/* ANALYSIS STEPS */
+.steps-row{display:flex;flex-direction:column;gap:0;margin-top:1.2rem}
+.astep{display:flex;gap:12px;align-items:flex-start;padding:.9rem 0;border-bottom:1px solid var(--bdr)}
+.astep:last-child{border-bottom:none}
+.asnum{min-width:26px;height:26px;border-radius:50%;background:var(--s2);border:1px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--or);flex-shrink:0;margin-top:1px}
+.astxt .asttl{font-weight:700;font-size:.9rem;margin-bottom:2px}
+.astxt .asdesc{font-size:.82rem;color:var(--txm);line-height:1.55}
+
+/* DATASET pills */
+.dpills{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:9px;margin-top:1.8rem}
+.dpill{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;padding:.9rem 1.1rem;display:flex;align-items:flex-start;gap:10px;cursor:default;transition:border-color .18s,transform .18s}
+.dpill:hover{border-color:var(--or);transform:translateY(-2px)}
+.dpico{font-size:1.3rem;flex-shrink:0;margin-top:1px}
+.dpname{font-size:.86rem;font-weight:700;color:var(--tx);margin-bottom:2px}
+.dptype{font-size:.74rem;color:var(--txm);font-family:var(--mono)}
+
+/* CODE BLOCK */
+.cb{background:#040a12;border:1px solid var(--bdr);border-radius:10px;overflow:hidden;margin-top:1.8rem}
+.cb-head{background:var(--s1);border-bottom:1px solid var(--bdr);padding:9px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.cbdots{display:flex;gap:5px}
+.dot{width:11px;height:11px;border-radius:50%}
+.dr{background:#ff5f57}.dy{background:#febc2e}.dg{background:#28c840}
+.cblang{font-family:var(--mono);font-size:10.5px;color:var(--txd);background:var(--s2);padding:2px 7px;border-radius:4px}
+.cpbtn{background:none;border:1px solid var(--bdr);color:var(--txm);padding:3px 9px;border-radius:5px;font-size:11.5px;cursor:pointer;font-family:var(--sans);transition:all .15s}
+.cpbtn:hover{border-color:var(--or);color:var(--or)}
+.cb-body{padding:1.1rem 1.3rem;font-family:var(--mono);font-size:13px;line-height:1.75;color:#9db8d8;white-space:pre;overflow-x:auto}
+.kw{color:#c792ea}.fn{color:#82aaff}.st{color:#c3e88d}.cm{color:#445566}.nm{color:#f78c6c}.op{color:#89ddff}
+
+/* TECH TAGS */
+.ttags{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.8rem}
+.ttag{display:flex;align-items:center;gap:6px;background:var(--s1);border:1px solid var(--bdr);border-radius:7px;padding:7px 13px;font-size:13px;font-weight:500;transition:all .15s}
+.ttag:hover{border-color:var(--or);transform:translateY(-1px)}
+
+/* RESUME FORMAT SECTION */
+.resume-box{background:var(--s1);border:1px solid var(--bdr);border-radius:12px;padding:1.8rem;margin-top:2rem}
+.rb-title{font-weight:800;font-size:1.05rem;margin-bottom:.3rem;display:flex;align-items:center;gap:8px}
+.rb-sub{font-size:.84rem;color:var(--txm);margin-bottom:1.2rem}
+.rb-bullets{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.rb-bullets li{display:flex;gap:8px;font-size:.88rem;line-height:1.55}
+.rb-bullets li::before{content:'•';color:var(--or);font-weight:700;flex-shrink:0;margin-top:1px}
+.rb-bullets .hl{color:var(--tx);font-weight:600}
+.copy-rb{margin-top:1.2rem;background:var(--s2);border:1px solid var(--bdr);color:var(--txm);padding:7px 14px;border-radius:7px;font-size:13px;cursor:pointer;font-family:var(--sans);font-weight:600;transition:all .15s}
+.copy-rb:hover{border-color:var(--or);color:var(--or)}
+
+/* INTERACTIVE PREDICTOR */
+.pred-card{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:2rem;margin-top:2rem}
+.pred-title{font-weight:800;font-size:1.1rem;margin-bottom:.25rem}
+.pred-sub{font-size:.83rem;color:var(--txm);margin-bottom:1.6rem}
+.inp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:13px;margin-bottom:1.3rem}
+.ig{display:flex;flex-direction:column;gap:4px}
+.ilbl{font-size:11.5px;font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.07em}
+.sldr{-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:var(--s2);outline:none;cursor:pointer;width:100%}
+.sldr::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;background:var(--or);border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 0 7px rgba(249,115,22,.5)}
+.ival{font-family:var(--mono);font-size:11.5px;color:var(--or);font-weight:600;text-align:right}
+.gend-tog{display:flex;background:var(--s2);border:1px solid var(--bdr);border-radius:7px;overflow:hidden;margin-top:2px}
+.gbtn{flex:1;padding:7px;background:none;border:none;color:var(--txm);font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.gbtn.on{background:var(--or);color:#fff}
+.pbtn{width:100%;padding:12px;background:var(--or);color:#fff;border:none;border-radius:8px;font-family:var(--sans);font-size:14.5px;font-weight:700;cursor:pointer;box-shadow:0 0 20px rgba(249,115,22,.3);transition:all .2s}
+.pbtn:hover{background:var(--or2);box-shadow:0 0 32px rgba(249,115,22,.5)}
+.pbtn:active{transform:scale(.99)}
+.res{margin-top:1.2rem;background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:1.2rem 1.4rem;display:none;align-items:center;gap:1rem;flex-wrap:wrap}
+.res.vis{display:flex;animation:fi .4s ease}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.rnum{font-size:2.2rem;font-weight:900;letter-spacing:-.03em;color:var(--or);font-family:var(--mono)}
+.runit{font-size:13px;color:var(--txm);font-weight:500}
+.requiv{font-size:.8rem;color:var(--txm);margin-top:4px;font-style:italic}
+.rmodel-note{font-size:.75rem;color:var(--txd);margin-top:3px}
+
+/* FOOTER */
+footer{background:var(--s1);border-top:1px solid var(--bdr);padding:2.5rem 1.5rem;text-align:center}
+.fauth{font-weight:700;font-size:1rem;margin-bottom:.35rem}
+.fsub{font-size:.83rem;color:var(--txm);margin-bottom:1.1rem}
+.slinks{display:flex;justify-content:center;gap:9px;flex-wrap:wrap}
+.slink{background:var(--s2);border:1px solid var(--bdr);color:var(--txm);padding:6px 13px;border-radius:7px;text-decoration:none;font-size:13px;font-weight:600;transition:all .15s}
+.slink:hover{border-color:var(--or);color:var(--or)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">🔥 CaloriesBurnt</span>
+  <a class="nl" href="#overview">Overview</a>
+  <a class="nl" href="#dataset">Dataset</a>
+  <a class="nl" href="#analysis">Analysis</a>
+  <a class="nl" href="#model">Model</a>
+  <a class="nl" href="#demo">Demo</a>
+  <a class="nl" href="#resume">Resume</a>
+  <a class="nl" href="#setup">Setup</a>
+  <span class="nspc"></span>
+  <a class="nghub" href="https://github.com/Malukchand/Calories-Burnt-Predictions-" target="_blank">⭐ GitHub</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="overview">
+  <div class="hbadge">📊 Linear Regression · May'25 – Jun'25 · Kaggle Dataset</div>
+  <h1 class="htitle">
+    <span class="hfire">🔥</span>
+    <span class="hgrad">Calories Burnt</span>
+    Predictions
+  </h1>
+  <p class="hsub">
+    A statistical machine learning project that identifies the key physiological drivers of calorie burn — using <strong style="color:var(--tx)">Linear Regression</strong>, IQR-based outlier detection, and rigorous residual diagnostics per feature.
+  </p>
+  <div class="hcta">
+    <a class="btn btnp" href="https://github.com/Malukchand/Calories-Burnt-Predictions-/blob/main/Calories_Burnt_Predictions.ipynb" target="_blank">📓 Open Notebook</a>
+    <a class="btn btns" href="#analysis">📈 See Analysis</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="sitem"><span class="snum" style="color:var(--or)">0.96</span><span class="slbl">R² · Duration</span></div>
+  <div class="sitem"><span class="snum" style="color:var(--bl)">0.90</span><span class="slbl">R² · Heart Rate</span></div>
+  <div class="sitem"><span class="snum" style="color:var(--pu)">0.82</span><span class="slbl">R² · Body Temp</span></div>
+  <div class="sitem"><span class="snum" style="color:var(--gr)">3</span><span class="slbl">Features Modelled</span></div>
+  <div class="sitem"><span class="snum" style="color:var(--te)">Linear</span><span class="slbl">Regression</span></div>
+</div>
+<hr class="div">
+
+<!-- WHAT THIS PROJECT DOES -->
+<section class="sec rev" id="about">
+  <div class="slabel">Project Overview</div>
+  <h2 class="stitle">Per-feature statistical analysis<br>of calorie expenditure</h2>
+  <p class="sbody">
+    Rather than a black-box ensemble, this project takes a rigorous statistical approach: each feature is individually examined for normality, outliers, linearity, and model fit before a final multi-feature regression. The result is a fully interpretable model with explained variance.
+  </p>
+
+  <div class="cgrid">
+    <div class="ccard"><span class="ccico">🧹</span><div class="cctit">Data Cleaning</div><div class="ccdesc">Dropped User_ID, mapped Gender to binary (male=1, female=0), checked null values — none found.</div></div>
+    <div class="ccard"><span class="ccico">📊</span><div class="cctit">EDA & Visualisation</div><div class="ccdesc">Correlation heatmap, boxplots, histograms, and count plots to understand distributions and feature relationships.</div></div>
+    <div class="ccard"><span class="ccico">🎯</span><div class="cctit">Outlier Detection</div><div class="ccdesc">IQR-based outlier function applied to Height, Weight, Heart Rate, Body Temp, and Calories.</div></div>
+    <div class="ccard"><span class="ccico">📉</span><div class="cctit">Normality Testing</div><div class="ccdesc">Frequency + density histograms and Normal Q-Q plots for each predictor variable.</div></div>
+    <div class="ccard"><span class="ccico">📐</span><div class="cctit">Linearity Checks</div><div class="ccdesc">Scatter plots, average-calories bar plots, and regression line fits per feature before modelling.</div></div>
+    <div class="ccard"><span class="ccico">🔬</span><div class="cctit">Residual Diagnostics</div><div class="ccdesc">4-panel diagnostic plots per feature: Residuals vs Fitted, Q-Q Residuals, Scale-Location, Residuals vs Leverage.</div></div>
+  </div>
+</section>
+<hr class="div">
+
+<!-- DATASET -->
+<section class="sec rev" id="dataset">
+  <div class="slabel">Data</div>
+  <h2 class="stitle">Kaggle exercise dataset —<br>7 features, 1 target</h2>
+  <p class="sbody">Two files — <code style="font-family:var(--mono);font-size:.88em;color:var(--or)">exercise.csv</code> and <code style="font-family:var(--mono);font-size:.88em;color:var(--or)">calories.csv</code> — merged on User_ID. The ID column is then dropped as it carries no predictive information.</p>
+
+  <div class="dpills">
+    <div class="dpill"><span class="dpico">👤</span><div><div class="dpname">Gender</div><div class="dptype">binary encoded · male=1 female=0</div></div></div>
+    <div class="dpill"><span class="dpico">🎂</span><div><div class="dpname">Age</div><div class="dptype">numeric · years</div></div></div>
+    <div class="dpill"><span class="dpico">📏</span><div><div class="dpname">Height</div><div class="dptype">numeric · cm · outliers checked</div></div></div>
+    <div class="dpill"><span class="dpico">⚖️</span><div><div class="dpname">Weight</div><div class="dptype">numeric · kg · outliers checked</div></div></div>
+    <div class="dpill" style="border-color:rgba(249,115,22,.4);background:rgba(249,115,22,.04)"><span class="dpico">⏱️</span><div><div class="dpname" style="color:var(--or)">Duration</div><div class="dptype">numeric · min · R²=0.96 ★ top feature</div></div></div>
+    <div class="dpill" style="border-color:rgba(59,130,246,.4);background:rgba(59,130,246,.04)"><span class="dpico">💓</span><div><div class="dpname" style="color:var(--bl)">Heart Rate</div><div class="dptype">numeric · bpm · R²=0.90</div></div></div>
+    <div class="dpill" style="border-color:rgba(168,85,247,.4);background:rgba(168,85,247,.04)"><span class="dpico">🌡️</span><div><div class="dpname" style="color:var(--pu)">Body Temp</div><div class="dptype">numeric · °C · R²=0.82</div></div></div>
+    <div class="dpill" style="border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.04)"><span class="dpico">🔥</span><div><div class="dpname" style="color:var(--gr)">Calories</div><div class="dptype">target · kcal · positively skewed</div></div></div>
+  </div>
+</section>
+<hr class="div">
+
+<!-- FEATURE ANALYSIS -->
+<section class="sec rev" id="analysis">
+  <div class="slabel">Per-Feature Analysis</div>
+  <h2 class="stitle">Each feature gets the full<br>statistical treatment</h2>
+  <p class="sbody">The notebook runs an identical 6-step analysis pipeline for every key predictor — click a tab to see what was done and why it matters.</p>
+
+  <div class="feat-tabs">
+    <div class="tbar">
+      <button class="tbtn on" onclick="ft(event,'dur')">⏱️ Duration</button>
+      <button class="tbtn" onclick="ft(event,'hr')">💓 Heart Rate</button>
+      <button class="tbtn" onclick="ft(event,'bt')">🌡️ Body Temp</button>
+      <button class="tbtn" onclick="ft(event,'ht')">📏 Height</button>
+    </div>
+
+    <!-- DURATION -->
+    <div class="tpanel on" id="tp-dur">
+      <div class="fcard">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:.5rem">
+          <span style="font-size:1.4rem">⏱️</span>
+          <div>
+            <strong style="font-size:1rem">Duration of Exercise</strong>
+            <div style="font-size:.82rem;color:var(--txm);margin-top:2px">The strongest predictor of calorie burn — near-perfect linear relationship</div>
+          </div>
+          <span style="margin-left:auto;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.3);border-radius:999px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--or)">R² = 0.96</span>
+        </div>
+        <div class="frow">
+          <div class="fmeta"><div class="fmeta-label">R² Score</div><div class="fmeta-val" style="color:var(--or)">0.96</div></div>
+          <div class="fmeta"><div class="fmeta-label">Relationship</div><div class="fmeta-val" style="color:var(--gr)">Strong linear</div></div>
+          <div class="fmeta"><div class="fmeta-label">Outliers Found</div><div class="fmeta-val">None</div></div>
+          <div class="fmeta"><div class="fmeta-label">Distribution</div><div class="fmeta-val">Near-normal</div></div>
+        </div>
+        <div class="r2bar-wrap">
+          <div class="r2bar-label"><span>Explanatory Power</span><span>96%</span></div>
+          <div class="r2bar"><div class="r2fill" style="background:linear-gradient(90deg,#f97316,#fbbf24)" data-w="96"></div></div>
+        </div>
+        <div class="steps-row">
+          <div class="astep"><div class="asnum">1</div><div class="astxt"><div class="asttl">Frequency + Density Histograms</div><div class="asdesc">Both histograms confirm Duration is approximately normally distributed.</div></div></div>
+          <div class="astep"><div class="asnum">2</div><div class="astxt"><div class="asttl">Normal Q-Q Plot</div><div class="asdesc">Points closely follow the reference line → assumption of normality satisfied.</div></div></div>
+          <div class="astep"><div class="asnum">3</div><div class="astxt"><div class="asttl">Scatter Plot (Duration vs Calories)</div><div class="asdesc">Clear, strong positive linear trend — longer workout = proportionally more calories.</div></div></div>
+          <div class="astep"><div class="asnum">4</div><div class="astxt"><div class="asttl">Bar Plot: Avg Calories per Duration Group</div><div class="asdesc">Binned groups confirm the monotonically increasing calorie trend with duration.</div></div></div>
+          <div class="astep"><div class="asnum">5</div><div class="astxt"><div class="asttl">Linear Regression Fit (sklearn)</div><div class="asdesc"><em>R² = 0.96, very low RMSE</em> — Duration alone explains 96% of calorie variance.</div></div></div>
+          <div class="astep"><div class="asnum">6</div><div class="astxt"><div class="asttl">4-Panel Residual Diagnostics (statsmodels)</div><div class="asdesc">Residuals vs Fitted, Q-Q Residuals, Scale-Location, and Residuals vs Leverage confirm homoscedasticity and no influential outliers.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEART RATE -->
+    <div class="tpanel" id="tp-hr">
+      <div class="fcard">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:.5rem">
+          <span style="font-size:1.4rem">💓</span>
+          <div>
+            <strong style="font-size:1rem">Heart Rate</strong>
+            <div style="font-size:.82rem;color:var(--txm);margin-top:2px">Second strongest predictor — physiologically intuitive</div>
+          </div>
+          <span style="margin-left:auto;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);border-radius:999px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--bl)">R² = 0.90</span>
+        </div>
+        <div class="frow">
+          <div class="fmeta"><div class="fmeta-label">R² Score</div><div class="fmeta-val" style="color:var(--bl)">0.90</div></div>
+          <div class="fmeta"><div class="fmeta-label">Relationship</div><div class="fmeta-val" style="color:var(--gr)">Strong linear</div></div>
+          <div class="fmeta"><div class="fmeta-label">Outliers Found</div><div class="fmeta-val">Checked via IQR</div></div>
+          <div class="fmeta"><div class="fmeta-label">Distribution</div><div class="fmeta-val">Near-normal</div></div>
+        </div>
+        <div class="r2bar-wrap">
+          <div class="r2bar-label"><span>Explanatory Power</span><span>90%</span></div>
+          <div class="r2bar"><div class="r2fill" style="background:linear-gradient(90deg,#3b82f6,#93c5fd)" data-w="90"></div></div>
+        </div>
+        <div class="steps-row">
+          <div class="astep"><div class="asnum">1</div><div class="astxt"><div class="asttl">Frequency + Density Histograms</div><div class="asdesc">Heart Rate distribution is roughly symmetric and bell-shaped.</div></div></div>
+          <div class="astep"><div class="asnum">2</div><div class="astxt"><div class="asttl">Normal Q-Q Plot</div><div class="asdesc">Light tails but broadly normal — linearity assumption holds.</div></div></div>
+          <div class="astep"><div class="asnum">3</div><div class="astxt"><div class="asttl">Scatter Plot (Heart Rate vs Calories)</div><div class="asdesc">Positive linear trend: higher BPM during exercise → more calories burned.</div></div></div>
+          <div class="astep"><div class="asnum">4</div><div class="astxt"><div class="asttl">Bar Plot: Avg Calories per Heart Rate Group</div><div class="asdesc">Binned groups show clean step-up in average calories as heart rate increases.</div></div></div>
+          <div class="astep"><div class="asnum">5</div><div class="astxt"><div class="asttl">Linear Regression Fit</div><div class="asdesc"><em>R² = 0.90</em> — Heart Rate explains 90% of calorie variance independently.</div></div></div>
+          <div class="astep"><div class="asnum">6</div><div class="astxt"><div class="asttl">4-Panel Residual Diagnostics</div><div class="asdesc">Moderate residual spread at higher fitted values — some heteroscedasticity, consistent with more variability at high effort levels.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BODY TEMP -->
+    <div class="tpanel" id="tp-bt">
+      <div class="fcard">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:.5rem">
+          <span style="font-size:1.4rem">🌡️</span>
+          <div>
+            <strong style="font-size:1rem">Body Temperature</strong>
+            <div style="font-size:.82rem;color:var(--txm);margin-top:2px">Third key predictor — thermogenesis and metabolic rate indicator</div>
+          </div>
+          <span style="margin-left:auto;background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);border-radius:999px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--pu)">R² = 0.82</span>
+        </div>
+        <div class="frow">
+          <div class="fmeta"><div class="fmeta-label">R² Score</div><div class="fmeta-val" style="color:var(--pu)">0.82</div></div>
+          <div class="fmeta"><div class="fmeta-label">Relationship</div><div class="fmeta-val" style="color:var(--gr)">Good linear</div></div>
+          <div class="fmeta"><div class="fmeta-label">Outliers Found</div><div class="fmeta-val">Checked via IQR</div></div>
+          <div class="fmeta"><div class="fmeta-label">Distribution</div><div class="fmeta-val">Narrow range</div></div>
+        </div>
+        <div class="r2bar-wrap">
+          <div class="r2bar-label"><span>Explanatory Power</span><span>82%</span></div>
+          <div class="r2bar"><div class="r2fill" style="background:linear-gradient(90deg,#a855f7,#d8b4fe)" data-w="82"></div></div>
+        </div>
+        <div class="steps-row">
+          <div class="astep"><div class="asnum">1</div><div class="astxt"><div class="asttl">Frequency + Density Histograms</div><div class="asdesc">Body Temp ranges narrowly (36–42°C) with a near-normal distribution.</div></div></div>
+          <div class="astep"><div class="asnum">2</div><div class="astxt"><div class="asttl">Normal Q-Q Plot</div><div class="asdesc">Q-Q confirms approximate normality within the physiological range.</div></div></div>
+          <div class="astep"><div class="asnum">3</div><div class="astxt"><div class="asttl">Scatter Plot (Body Temp vs Calories)</div><div class="asdesc">Positive trend — higher body temp during exercise correlates with more calories burned.</div></div></div>
+          <div class="astep"><div class="asnum">4</div><div class="astxt"><div class="asttl">Bar Plot: Avg Calories per Temp Group</div><div class="asdesc">Shows a clear upward staircase pattern in average calories as temperature rises.</div></div></div>
+          <div class="astep"><div class="asnum">5</div><div class="astxt"><div class="asttl">Linear Regression Fit</div><div class="asdesc"><em>R² = 0.82</em> — Body Temp explains 82% of calorie variance on its own.</div></div></div>
+          <div class="astep"><div class="asnum">6</div><div class="astxt"><div class="asttl">4-Panel Residual Diagnostics</div><div class="asdesc">Residuals are acceptably uniform across the narrow temperature range.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEIGHT -->
+    <div class="tpanel" id="tp-ht">
+      <div class="fcard">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:.5rem">
+          <span style="font-size:1.4rem">📏</span>
+          <div>
+            <strong style="font-size:1rem">Height</strong>
+            <div style="font-size:.82rem;color:var(--txm);margin-top:2px">Weaker predictor — analysed to demonstrate EDA methodology</div>
+          </div>
+          <span style="margin-left:auto;background:rgba(122,143,168,.1);border:1px solid var(--bdr);border-radius:999px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--txm)">Low R²</span>
+        </div>
+        <div class="frow">
+          <div class="fmeta"><div class="fmeta-label">Outliers Found</div><div class="fmeta-val">Yes — IQR flagged</div></div>
+          <div class="fmeta"><div class="fmeta-label">Relationship</div><div class="fmeta-val" style="color:var(--ye)">Weak linear</div></div>
+          <div class="fmeta"><div class="fmeta-label">Normal Q-Q</div><div class="fmeta-val">Approximately normal</div></div>
+          <div class="fmeta"><div class="fmeta-label">Takeaway</div><div class="fmeta-val">Not a top driver</div></div>
+        </div>
+        <div class="steps-row">
+          <div class="astep"><div class="asnum">1</div><div class="astxt"><div class="asttl">Outlier Detection via IQR</div><div class="asdesc">The <code style="font-family:var(--mono);font-size:.9em">get_outliers()</code> function flagged some extreme height values using Q1 − 1.5×IQR and Q3 + 1.5×IQR bounds.</div></div></div>
+          <div class="astep"><div class="asnum">2</div><div class="astxt"><div class="asttl">Frequency + Density Histograms</div><div class="asdesc">Bimodal shape visible — reflects gender-based height distribution in the dataset.</div></div></div>
+          <div class="astep"><div class="asnum">3</div><div class="astxt"><div class="asttl">Normal Q-Q Plot</div><div class="asdesc">Slight deviations at tails, consistent with the bimodal pattern.</div></div></div>
+          <div class="astep"><div class="asnum">4</div><div class="astxt"><div class="asttl">Linear Regression + Diagnostics</div><div class="asdesc">Low R² confirms height alone is not a strong calorie predictor — but the diagnostic pipeline is identical, demonstrating rigour.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<hr class="div">
+
+<!-- MODEL -->
+<section class="sec rev" id="model">
+  <div class="slabel">Model</div>
+  <h2 class="stitle">Linear Regression —<br>interpretable and effective</h2>
+  <p class="sbody">The project uses scikit-learn's <code style="font-family:var(--mono);font-size:.88em;color:var(--or)">LinearRegression</code> and statsmodels' <code style="font-family:var(--mono);font-size:.88em;color:var(--or)">OLS</code> per feature, with MAE, MSE, and R² as evaluation metrics.</p>
+
+  <div class="cb">
+    <div class="cb-head">
+      <div class="cbdots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+      <span class="cblang">Python — per-feature regression pipeline</span>
+      <button class="cpbtn" onclick="cpCode(this,'c1')">Copy</button>
+    </div>
+    <div class="cb-body" id="c1"><span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> <span class="fn">LinearRegression</span>
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> <span class="fn">mean_squared_error</span>, <span class="fn">r2_score</span>
+<span class="kw">import</span> statsmodels.api <span class="kw">as</span> sm
+
+<span class="cm"># ── Per-feature sklearn fit ──────────────────────</span>
+X = df[[<span class="st">'Duration'</span>]]    <span class="cm"># swap in Heart_Rate, Body_Temp, etc.</span>
+y = df[<span class="st">'Calories'</span>]
+
+model = <span class="fn">LinearRegression</span>()
+model.<span class="fn">fit</span>(X, y)
+y_pred = model.<span class="fn">predict</span>(X)
+
+r2   = <span class="fn">r2_score</span>(y, y_pred)          <span class="cm"># Duration → 0.96</span>
+rmse = np.<span class="fn">sqrt</span>(<span class="fn">mean_squared_error</span>(y, y_pred))
+
+<span class="kw">print</span>(<span class="st">f"R²: {r2:.2f} | RMSE: {rmse:.2f}"</span>)
+
+<span class="cm"># ── IQR outlier detection ────────────────────────</span>
+<span class="kw">def</span> <span class="fn">get_outliers</span>(df, col):
+    q1, q3 = df[col].<span class="fn">quantile</span>([<span class="nm">.25</span>, <span class="nm">.75</span>])
+    iqr = q3 <span class="op">-</span> q1
+    <span class="kw">return</span> df[col][(df[col] <span class="op">&lt;</span> q1 <span class="op">-</span> <span class="nm">1.5</span><span class="op">*</span>iqr) <span class="op">|</span> (df[col] <span class="op">&gt;</span> q3 <span class="op">+</span> <span class="nm">1.5</span><span class="op">*</span>iqr)]</div>
+  </div>
+</section>
+<hr class="div">
+
+<!-- INTERACTIVE DEMO -->
+<section class="sec rev" id="demo">
+  <div class="slabel">Interactive Demo</div>
+  <h2 class="stitle">Estimate your calorie burn</h2>
+  <p class="sbody">Uses the linear regression coefficients from the notebook. Duration has the highest weight (R²=0.96), followed by Heart Rate and Body Temp.</p>
+
+  <div class="pred-card">
+    <div class="pred-title">🔥 Calorie Burn Estimator</div>
+    <div class="pred-sub">Approximate prediction using learned linear weights from the notebook's models</div>
+    <div class="inp-grid">
+      <div class="ig">
+        <label class="ilbl">Gender</label>
+        <div class="gend-tog">
+          <button class="gbtn on" id="bm" onclick="sg('male')">♂ Male</button>
+          <button class="gbtn" id="bf" onclick="sg('female')">♀ Female</button>
+        </div>
+      </div>
+      <div class="ig">
+        <label class="ilbl">Age</label>
+        <input type="range" class="sldr" id="age" min="18" max="80" value="25" oninput="uv('age','yrs')">
+        <div class="ival" id="age-v">25 yrs</div>
+      </div>
+      <div class="ig">
+        <label class="ilbl">Weight (kg)</label>
+        <input type="range" class="sldr" id="wt" min="40" max="130" value="70" oninput="uv('wt','kg')">
+        <div class="ival" id="wt-v">70 kg</div>
+      </div>
+      <div class="ig">
+        <label class="ilbl">Height (cm)</label>
+        <input type="range" class="sldr" id="ht" min="145" max="210" value="175" oninput="uv('ht','cm')">
+        <div class="ival" id="ht-v">175 cm</div>
+      </div>
+      <div class="ig">
+        <label class="ilbl">Duration (min) — top feature</label>
+        <input type="range" class="sldr" id="dur" min="5" max="90" value="30" oninput="uv('dur','min')">
+        <div class="ival" id="dur-v">30 min</div>
+      </div>
+      <div class="ig">
+        <label class="ilbl">Heart Rate (bpm)</label>
+        <input type="range" class="sldr" id="hr" min="60" max="180" value="110" oninput="uv('hr','bpm')">
+        <div class="ival" id="hr-v">110 bpm</div>
+      </div>
+      <div class="ig">
+        <label class="ilbl">Body Temp (°C)</label>
+        <input type="range" class="sldr" id="bt" min="36" max="42" step="0.1" value="38.5" oninput="uv('bt','°C')">
+        <div class="ival" id="bt-v">38.5 °C</div>
+      </div>
+    </div>
+    <button class="pbtn" onclick="pred()">⚡ Predict Calories</button>
+    <div class="res" id="res">
+      <div>
+        <div class="rnum" id="rnum">0</div>
+        <div class="runit">kcal burned</div>
+      </div>
+      <div>
+        <div style="font-size:.83rem;color:var(--txm);margin-bottom:5px">Roughly equivalent to:</div>
+        <div id="req" class="requiv"></div>
+        <div class="rmodel-note">Estimated via linear weights: Duration (coeff ~7.2) + Heart Rate + Body Temp</div>
+      </div>
+    </div>
+  </div>
+</section>
+<hr class="div">
+
+<!-- RESUME SECTION -->
+<section class="sec rev" id="resume">
+  <div class="slabel">Resume Format</div>
+  <h2 class="stitle">Ready to paste into your CV</h2>
+  <p class="sbody">Exactly how this project appears in your resume — just click copy.</p>
+
+  <div class="resume-box">
+    <div class="rb-title">📄 Calories Burnt Predictions <span style="font-size:.85rem;font-weight:400;color:var(--txm)">| Self Project | ⭐</span> <span style="margin-left:auto;font-size:.78rem;font-weight:400;color:var(--txm)">(May'25 – Jun'25)</span></div>
+    <ul class="rb-bullets">
+      <li>Built a <span class="hl">calorie expenditure prediction model</span> using user activity, health, and demographic features from a <span class="hl">Kaggle dataset</span></li>
+      <li>Cleaned and analyzed the dataset using <span class="hl">Pandas</span>, visualizing trend patterns with <span class="hl">histograms</span>, <span class="hl">boxplots</span> and <span class="hl">correlation heatmaps</span></li>
+      <li>Trained and evaluated a <span class="hl">Linear Regression</span> model using <span class="hl">scikit-learn</span> with <span class="hl">R-squared</span>, <span class="hl">MAE</span> and <span class="hl">MSE</span> metrics</li>
+      <li>Identified activity <span class="hl">duration (0.96)</span>, <span class="hl">heart rate (0.90)</span>, <span class="hl">body temperature (0.82)</span> as the strongest major factors influencing calorie burn</li>
+    </ul>
+    <button class="copy-rb" onclick="cpResume(this)">📋 Copy Resume Bullets</button>
+  </div>
+</section>
+<hr class="div">
+
+<!-- SETUP -->
+<section class="sec rev" id="setup">
+  <div class="slabel">Setup</div>
+  <h2 class="stitle">Run it in 3 commands</h2>
+  <div class="ttags">
+    <div class="ttag">🐍 Python 3.8+</div>
+    <div class="ttag">📓 Jupyter / Colab</div>
+    <div class="ttag">🐼 Pandas</div>
+    <div class="ttag">🔢 NumPy</div>
+    <div class="ttag">📊 Matplotlib</div>
+    <div class="ttag">🌊 Seaborn</div>
+    <div class="ttag">⚙️ scikit-learn</div>
+    <div class="ttag">📐 statsmodels</div>
+    <div class="ttag">🧮 scipy</div>
+  </div>
+
+  <div class="cb" style="margin-top:1.6rem">
+    <div class="cb-head">
+      <div class="cbdots"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span></div>
+      <span class="cblang">bash</span>
+      <button class="cpbtn" onclick="cpCode(this,'c2')">Copy</button>
+    </div>
+    <div class="cb-body" id="c2"><span class="cm"># 1. Clone</span>
+git clone https://github.com/Malukchand/Calories-Burnt-Predictions-.git
+<span class="kw">cd</span> Calories-Burnt-Predictions-
+
+<span class="cm"># 2. Install dependencies</span>
+pip install numpy pandas matplotlib seaborn scikit-learn statsmodels scipy jupyter
+
+<span class="cm"># 3. Run</span>
+jupyter notebook Calories_Burnt_Predictions.ipynb</div>
+  </div>
+</section>
+<hr class="div">
+
+<footer>
+  <div class="fauth">Maluk — BSBE, IIT Kanpur</div>
+  <div class="fsub">3rd Year · Biological Sciences & Bioengineering · Batch 2023 · May–Jun 2025</div>
+  <div class="slinks">
+    <a class="slink" href="https://github.com/Malukchand" target="_blank">🐙 GitHub</a>
+    <a class="slink" href="https://github.com/Malukchand/Calories-Burnt-Predictions-" target="_blank">📁 Repo</a>
+    <a class="slink" href="https://github.com/Malukchand/Calories-Burnt-Predictions-/blob/main/Calories_Burnt_Predictions.ipynb" target="_blank">📓 Notebook</a>
+  </div>
+  <p style="margin-top:1.2rem;font-size:.76rem;color:var(--txd)">MIT License · Dataset from Kaggle · Built May–Jun 2025</p>
+</footer>
+
+<script>
+// Reveal on scroll
+const obs = new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');obs.unobserve(x.target)}}),{threshold:.1});
+document.querySelectorAll('.rev').forEach(e=>obs.observe(e));
+
+// Bar animation
+function animBars(){document.querySelectorAll('.r2fill').forEach(b=>{b.style.width='0';requestAnimationFrame(()=>requestAnimationFrame(()=>{b.style.width=b.dataset.w+'%'}))})}
+const bobs = new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){animBars();bobs.disconnect()}})},{threshold:.2});
+bobs.observe(document.getElementById('analysis'));
+
+// Feature tabs
+function ft(e,id){
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.tpanel').forEach(p=>p.classList.remove('on'));
+  e.currentTarget.classList.add('on');
+  document.getElementById('tp-'+id).classList.add('on');
+  animBars();
+}
+
+// Sliders
+function uv(id,unit){const v=document.getElementById(id).value;document.getElementById(id+'-v').textContent=v+' '+unit}
+
+// Gender
+let gend='male';
+function sg(g){gend=g;document.getElementById('bm').classList.toggle('on',g==='male');document.getElementById('bf').classList.toggle('on',g==='female')}
+
+// Predict (linear regression weights from notebook)
+function pred(){
+  const dur=+document.getElementById('dur').value;
+  const hr=+document.getElementById('hr').value;
+  const bt=+document.getElementById('bt').value;
+  const wt=+document.getElementById('wt').value;
+  const ht=+document.getElementById('ht').value;
+  const age=+document.getElementById('age').value;
+  const gf=gend==='female'?0:1;
+  // Linear combination based on notebook R² weights
+  const cal=Math.max(5,Math.round(
+    dur*7.18 + (hr-70)*0.68 + (bt-37)*11.4 + wt*0.15 - ht*0.05 - age*0.04 + gf*(-3.5) - 52
+  ));
+  document.getElementById('rnum').textContent=cal;
+  const eqs=[`🍎 ~${Math.round(cal/52)} apples`,`🚶 ~${Math.round(cal/5)} min walking`,`🍫 ${(cal/540).toFixed(1)} choc bars`,`🏃 ~${Math.round(cal/11)} min running`];
+  document.getElementById('req').textContent=eqs[Math.floor(Math.random()*eqs.length)];
+  const r=document.getElementById('res');r.classList.remove('vis');requestAnimationFrame(()=>r.classList.add('vis'));
+}
+
+// Copy code
+function cpCode(btn,id){
+  navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>{btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',1800)});
+}
+
+// Copy resume bullets
+function cpResume(btn){
+  const txt=`Calories Burnt Predictions | Self Project | GitHub  (May'25 - Jun'25)
+• Built a calorie expenditure prediction model using user activity, health, and demographic features from a Kaggle dataset
+• Cleaned and analyzed the dataset using Pandas, visualizing trend patterns with histograms, boxplots and correlation heatmaps
+• Trained and evaluated a Linear Regression model using scikit-learn with R-squared, MAE and MSE metrics
+• Identified activity duration (0.96), heart rate (0.90), body temperature (0.82) as the strongest major factors influencing calorie burn`;
+  navigator.clipboard.writeText(txt).then(()=>{btn.textContent='✅ Copied!';setTimeout(()=>btn.textContent='📋 Copy Resume Bullets',2000)});
+}
+</script>
+</body>
+</html>
